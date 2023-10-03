@@ -5,7 +5,9 @@ const emailInput = document.querySelector('input[name="email"]');
 const messageTextarea = document.querySelector('textarea[name="message"]');
 const LC_KEY = 'feedback-form-state';
 
-feedbackForm.addEventListener('input', throttle(handleSaveToLS, 500));
+const throttledSaveToLS = throttle(handleSaveToLS, 500);
+
+feedbackForm.addEventListener('input', throttledSaveToLS);
 
 function handleSaveToLS() {
   const formData = {
@@ -35,13 +37,13 @@ function handleSubmit(event) {
     message: messageTextarea.value,
   };
 
+  localStorage.removeItem(LC_KEY);
+
   if (formDataObject.email === '' || formDataObject.message === '') {
     const message = 'Please fill all fields!';
     alert(message);
     return; 
   }
-
-  localStorage.removeItem(LC_KEY);
 
   emailInput.value = '';
   messageTextarea.value = '';
